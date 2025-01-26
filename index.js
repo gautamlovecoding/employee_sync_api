@@ -7,6 +7,7 @@ const connectDB = require("./db/db");
 const userRegister = require("./userSeed");
 const authRouter = require("./routes/auth");
 const companyRouter = require("./routes/company");
+const salaryRouter = require("./routes/salary");
 const employeeRouter = require("./routes/employee");
 
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRouter);
 app.use("/api/companies", companyRouter);
 app.use("/api/employees", employeeRouter);
+app.use("/api/salary", salaryRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

@@ -88,13 +88,74 @@ const getAllEmployees = async (req, res) => {
 const getOneEmployee = async (req, res) => {
   try {
     const employee = await Employee.findById(req.params.id)
-    .populate("userId", "name email profileImage")
-    .populate("company", "comp_name");
-    console.log("🚀⚡👨‍💻🚀 ~ getOneEmployee ~ employee🚀🔥🚀➢", employee)
+      .populate("userId", "name email profileImage")
+      .populate("company", "comp_name");
     return res.status(200).json({ success: true, employee });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+const updateEmployee = async (req, res) => {
+  try {
+    const { company, name, designation, salary, maritialStatus } = req.body;
 
-module.exports = { addEmployee, upload, getAllEmployees, getOneEmployee };
+    const employee = await Employee.findById(req.params.id);
+
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employee not found" });
+    }
+
+    const user = await User.findById(employee.userId);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const updateUser = await User.findByIdAndUpdate(user._id, {
+      name,
+    });
+
+    const updateEmployee = await Employee.findByIdAndUpdate(req.params.id, {
+      company,
+      name,
+      designation,
+      salary,
+      maritialStatus,
+    });
+
+    if (!updateUser || !updateEmployee) {
+      return res
+        .status(500)
+        .json({ success: false, message: "document not found" });
+    }
+    return res
+      .status(200)
+      .json({ success: true, message: "Employee updated successfully" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "update employee failed" });
+  }
+};
+
+const fetchEmployeeByCompanyId = async (req, res) => {
+  try {
+    const employees = await Employee.find({ company: req.params.id });
+    return res.status(200).json({ success: true, employees, message: "fetched" });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "fetch employee by company id failed" });
+  }
+};
+
+module.exports = {
+  addEmployee,
+  upload,
+  getAllEmployees,
+  getOneEmployee,
+  updateEmployee,
+  fetchEmployeeByCompanyId,
+};
