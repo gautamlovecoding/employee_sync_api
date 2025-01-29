@@ -87,9 +87,15 @@ const getAllEmployees = async (req, res) => {
 
 const getOneEmployee = async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id)
+    let employee = await Employee.findById(req.params.id)
       .populate("userId", "name email profileImage")
       .populate("company", "comp_name");
+
+    if (!employee) {
+      employee = await Employee.findOne({ userId: req.params.id })
+        .populate("userId", "name email profileImage")
+        .populate("company", "comp_name");
+    }
     return res.status(200).json({ success: true, employee });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -143,7 +149,9 @@ const updateEmployee = async (req, res) => {
 const fetchEmployeeByCompanyId = async (req, res) => {
   try {
     const employees = await Employee.find({ company: req.params.id });
-    return res.status(200).json({ success: true, employees, message: "fetched" });
+    return res
+      .status(200)
+      .json({ success: true, employees, message: "fetched" });
   } catch (err) {
     res
       .status(500)
