@@ -9,6 +9,7 @@ const authRouter = require("./routes/auth");
 const companyRouter = require("./routes/company");
 const salaryRouter = require("./routes/salary");
 const employeeRouter = require("./routes/employee");
+const leaveRouter = require("./routes/leave");
 
 const PORT = process.env.PORT || 5000;
 
@@ -22,7 +23,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/companies", companyRouter);
 app.use("/api/employees", employeeRouter);
 app.use("/api/salary", salaryRouter);
-
+app.use("/api/leave", leaveRouter);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
