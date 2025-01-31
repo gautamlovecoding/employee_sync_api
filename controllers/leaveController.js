@@ -33,7 +33,6 @@ const getLeaveById = async (req, res) => {
   try {
     const { userId } = req.params;
     const leave = await Leave.find({ userId }).sort({ appliedAt: -1 });
-    console.log("🚀⚡👨‍💻🚀 ~ getLeaveById ~ leave🚀🔥🚀➢", leave)
     res.status(200).json({ success: true, leaves: leave });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

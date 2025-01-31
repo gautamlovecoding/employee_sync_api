@@ -23,7 +23,6 @@ const addSalary = async (req, res) => {
       message: "salary created successfully",
     });
   } catch (error) {
-    console.log("🚀⚡👨‍💻🚀 ~ addSalary ~ error🚀🔥🚀➢", error.message);
     return res
       .status(500)
       .json({ success: false, message: "salary Create error" });
@@ -33,15 +32,14 @@ const addSalary = async (req, res) => {
 const getSalary = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("🚀⚡👨‍💻🚀 ~ getSalary ~ id🚀🔥🚀➢", id)
-    const salaryData = await Salary
-      .find({ employeeId: id })
-      .populate("employeeId", "employeeId");
+    const salaryData = await Salary.find({ employeeId: id }).populate(
+      "employeeId",
+      "employeeId"
+    );
     return res
       .status(200)
       .json({ success: true, salary: salaryData, message: "fetched" });
   } catch (error) {
-    console.log("🚀⚡👨‍💻🚀 ~ getSalary ~ error🚀🔥🚀➢", error);
     return res
       .status(500)
       .json({ success: false, message: "salary get error" });
